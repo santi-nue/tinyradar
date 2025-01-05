@@ -1,5 +1,8 @@
 ## TinyRadar
 
+[![build](https://github.com/MasterFlomaster1/tinyradar/actions/workflows/build.yml/badge.svg)](https://github.com/MasterFlomaster1/tinyradar/actions/workflows/build.yml)
+![GitHub Release](https://img.shields.io/github/v/release/MasterFlomaster1/tinyradar)
+
 ### Usage
 
 1. Download the latest release JAR file
