@@ -52,7 +52,6 @@ public final class Markers {
         SVGDocument blackhawk = loader.load(Resources.getAsStream("/markers/blackhawk.svg"));
         SVGDocument b52 = loader.load(Resources.getAsStream("/markers/b52.svg"));
         SVGDocument b707 = loader.load(Resources.getAsStream("/markers/b707.svg"));
-        SVGDocument unknown = loader.load(Resources.getAsStream("/markers/unknown.svg"));
         SVGDocument groundSquare = loader.load(Resources.getAsStream("/markers/ground_square.svg"));
         groundTower = loader.load(Resources.getAsStream("/markers/ground_tower.svg"));
         SVGDocument puma = loader.load(Resources.getAsStream("/markers/puma.svg"));

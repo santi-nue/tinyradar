@@ -1,6 +1,7 @@
 package dev.mf1.tinyradar.core.oa;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import dev.mf1.tinyradar.core.TinyRadarException;
 import lombok.Data;
 
 @Data
@@ -34,7 +35,7 @@ public class Airport {
                 case "seaplane_base" -> SEAPLANE;
                 case "small_airport" -> SMALL;
                 case "balloonport" -> BALLOONPORT;
-                default -> throw new RuntimeException("Unknown airport type: " + value);
+                default -> throw new IllegalArgumentException("Unknown airport type: " + value);
             };
         }
 

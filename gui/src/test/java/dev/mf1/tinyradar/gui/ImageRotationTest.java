@@ -2,6 +2,7 @@ package dev.mf1.tinyradar.gui;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import dev.mf1.tinyradar.core.TinyRadar;
+import dev.mf1.tinyradar.core.TinyRadarException;
 import dev.mf1.tinyradar.core.WGS84;
 import dev.mf1.tinyradar.core.event.FlightsUpdateEvent;
 import dev.mf1.tinyradar.core.util.DummyObjects;
@@ -49,7 +50,7 @@ public class ImageRotationTest {
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    throw new TinyRadarException(e);
                 }
             }
         });

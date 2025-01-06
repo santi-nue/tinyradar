@@ -32,7 +32,7 @@ public class Service {
 
             TinyRadar.BUS.post(new FlightsUpdateEvent(filtered));
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new TinyRadarException(e);
         }
     }
 

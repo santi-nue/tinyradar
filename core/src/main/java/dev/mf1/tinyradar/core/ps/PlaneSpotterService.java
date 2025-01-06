@@ -1,5 +1,6 @@
 package dev.mf1.tinyradar.core.ps;
 
+import dev.mf1.tinyradar.core.TinyRadarException;
 import lombok.extern.slf4j.Slf4j;
 import org.aeonbits.owner.ConfigFactory;
 
@@ -29,7 +30,7 @@ public class PlaneSpotterService {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             return response.body();
         } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+            throw new TinyRadarException(e);
         }
     }
 

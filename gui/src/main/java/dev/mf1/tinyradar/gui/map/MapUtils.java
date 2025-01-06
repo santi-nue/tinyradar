@@ -108,7 +108,8 @@ public final class MapUtils {
      * @return a Point representing the center tile's coordinates
      */
     public static Point getCenterTile(List<Tile> tiles) {
-        int sumX = 0, sumY = 0;
+        int sumX = 0;
+        int sumY = 0;
         for (Tile tile : tiles) {
             sumX += tile.getX();
             sumY += tile.getY();

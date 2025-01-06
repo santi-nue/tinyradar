@@ -1,6 +1,7 @@
 package dev.mf1.tinyradar.core.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.mf1.tinyradar.core.TinyRadarException;
 import dev.mf1.tinyradar.core.al.Aircraft;
 import dev.mf1.tinyradar.core.al.Response;
 
@@ -19,7 +20,7 @@ public final class DummyObjects {
             var a = objectMapper.readValue(DummyObjects.class.getClassLoader().getResourceAsStream("response.json"), Response.class);
             return a.getAc();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new TinyRadarException(e);
         }
     }
 

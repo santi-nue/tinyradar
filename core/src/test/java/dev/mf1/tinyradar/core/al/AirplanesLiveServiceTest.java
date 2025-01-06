@@ -3,11 +3,13 @@ package dev.mf1.tinyradar.core.al;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.mf1.tinyradar.core.WGS84;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class AirplanesLiveServiceTest {
 
     @Test
+    @Disabled("Manual activation")
     void demo() throws JsonProcessingException {
         AirplanesLiveService service = new AirplanesLiveService();
 

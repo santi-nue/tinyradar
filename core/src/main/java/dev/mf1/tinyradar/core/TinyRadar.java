@@ -96,7 +96,7 @@ public final class TinyRadar {
             try {
                 Files.createDirectory(path);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new TinyRadarException(e);
             }
         }
     }

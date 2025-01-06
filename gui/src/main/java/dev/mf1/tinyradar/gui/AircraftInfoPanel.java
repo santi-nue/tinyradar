@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formdev.flatlaf.FlatClientProperties;
 import com.google.common.eventbus.Subscribe;
 import dev.mf1.tinyradar.core.TinyRadar;
+import dev.mf1.tinyradar.core.TinyRadarException;
 import dev.mf1.tinyradar.core.al.Aircraft;
 import dev.mf1.tinyradar.core.event.AircraftSelectionEvent;
 import dev.mf1.tinyradar.core.event.FlightsUpdateEvent;
@@ -252,7 +253,7 @@ public class AircraftInfoPanel extends JPanel {
                     var future = HttpFileDownloader.asyncDownload(obj.getPhotos().getFirst().getThumbnailLarge().getSrc(), target);
                     future.thenAccept(result -> displayPicture());
                 } catch (JsonProcessingException ex) {
-                    throw new RuntimeException(ex);
+                    throw new TinyRadarException(ex);
                 }
             });
         } else {
