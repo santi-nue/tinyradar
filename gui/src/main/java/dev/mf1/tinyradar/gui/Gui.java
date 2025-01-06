@@ -14,24 +14,38 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 @Slf4j
-public class Gui {
+public class Gui implements ShutdownListener {
 
     public static SimpleFrame rootFrame;
     private static final List<ShutdownListener> shutdownListeners = new ArrayList<>();
+    private final Preferences preferences = Preferences.userNodeForPackage(Gui.class);
 
     private Gui() {
     }
 
     public static void main(String[] args) {
+        new Gui().start();
+    }
+
+    private void start() {
         log.info("Starting TinyRadar");
 
+        addShutdownListener(this);
         Thread.currentThread().setUncaughtExceptionHandler(new DefaultExceptionHandler());
         FlatMacDarkLaf.setup();
         Markers.load();
 
-        TinyRadar.pos = new WGS84(40.6397f, -73.7788f);
+        var lat = preferences.getFloat("lat", 40.6397f);
+        var lon = preferences.getFloat("lon", -73.7788f);
+        var range = preferences.getInt("range", 10);
+        var zoom = preferences.getInt("zoom", 11);
+
+        TinyRadar.pos = new WGS84(lat, lon);
+        TinyRadar.zoom = zoom;
+        TinyRadar.range = range;
         TinyRadar.of().loadAirports();
         TinyRadar.of().launch();
 
@@ -43,9 +57,9 @@ public class Gui {
                     shutdownListeners.forEach(ShutdownListener::onShutdown);
                 }
             });
+            log.info(systemInfo());
 
             TinyRadar.BUS.post(new LocationChangeEvent(TinyRadar.pos));
-            log.info(systemInfo());
         });
     }
 
@@ -72,4 +86,11 @@ public class Gui {
                 + ")";
     }
 
+    @Override
+    public void onShutdown() {
+        preferences.putFloat("lat", TinyRadar.pos.latitude());
+        preferences.putFloat("lon", TinyRadar.pos.longitude());
+        preferences.putInt("range", TinyRadar.range);
+        preferences.putInt("zoom", TinyRadar.zoom);
+    }
 }
