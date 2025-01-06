@@ -4,6 +4,7 @@ import com.formdev.flatlaf.extras.FlatSVGIcon;
 import dev.mf1.tinyradar.core.Filter;
 import dev.mf1.tinyradar.core.TinyRadar;
 import dev.mf1.tinyradar.core.event.ZoomChangeEvent;
+import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
@@ -11,10 +12,13 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import java.awt.Desktop;
 import java.awt.Insets;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.net.URI;
 
+@Slf4j
 final class ToolbarPanel extends JPanel {
 
     private JFrame presetsFrame;
@@ -73,8 +77,25 @@ final class ToolbarPanel extends JPanel {
         milButton.addActionListener(e -> Filter.showMilOnly = !Filter.showMilOnly);
 
         var githubButton = new JButton("");
-        githubButton.setToolTipText("Open project's github page");
+        githubButton.setToolTipText("Open project on GitHub");
         githubButton.setIcon(new FlatSVGIcon(Resources.get("/icons/github.svg")));
+        githubButton.addActionListener(e -> {
+            if (!Desktop.isDesktopSupported()) {
+                log.error("Desktop is not supported");
+                return;
+            }
+
+            if (!Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                log.error("Desktop browse() is not supported");
+                return;
+            }
+
+            try {
+                Desktop.getDesktop().browse(new URI("https://github.com/MasterFlomaster1/tinyradar"));
+            } catch (Exception ex) {
+                log.error("Error opening link ", ex);
+            }
+        });
 
         var toolbar = new JToolBar();
         toolbar.setMargin(new Insets(0, 0, 0, 0));
