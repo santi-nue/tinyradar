@@ -4,16 +4,21 @@ import dev.mf1.tinyradar.core.TinyRadar;
 import dev.mf1.tinyradar.core.WGS84;
 import dev.mf1.tinyradar.gui.map.MapUtils;
 
+import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class LayerSurface extends TransparentPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        removeAll();
 
         if (TinyRadar.zoom < 8)
             return;
@@ -30,8 +35,10 @@ public class LayerSurface extends TransparentPanel {
             var pos = new WGS84((float) a.getLatitude(), (float) a.getLongitude());
             var proj = MapUtils.getScreenPosition(pos, TinyRadar.zoom, TinyRadar.pos, w, h);
 
-            g2d.fillRect(proj[0], proj[1], 3, 3);
-            g2d.drawString(a.getIdent(), proj[0] + 4, proj[1] + 4);
+            var airportSvg = new AirportMarkerPanel();
+            airportSvg.setBounds(proj[0] - 8, proj[1] - 8, 16, 16);
+            airportSvg.setToolTipText("%s %n %s".formatted(a.getName(), a.getIdent()));
+            add(airportSvg);
         });
 
     }
