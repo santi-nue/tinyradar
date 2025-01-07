@@ -13,3 +13,7 @@
 <p align="center">
   <img src=".github/pic.png" alt="Description of the image">
 </p>
+
+<p align="center">
+  <img src=".github/pic2.png" alt="Description of the image">
+</p>
