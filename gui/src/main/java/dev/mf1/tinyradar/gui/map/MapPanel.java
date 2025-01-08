@@ -20,16 +20,16 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 public class MapPanel extends TransparentPanel {
 
     private static final int TILE_SIZE = 256;
-    private final List<Tile> tileList = new ArrayList<>();
+    private final List<Tile> tileList = new CopyOnWriteArrayList<>();
     private int centerTileX;
     private int centerTileY;
 
