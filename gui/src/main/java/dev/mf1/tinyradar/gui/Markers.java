@@ -42,12 +42,15 @@ public final class Markers {
         SVGDocument heavy4E = loader.load(Resources.getAsStream("/markers/heavy4e.svg"));
         jetSwept = loader.load(Resources.getAsStream("/markers/jet_swept.svg"));
         SVGDocument twinLarge = loader.load(Resources.getAsStream("/markers/twin_large.svg"));
+        SVGDocument v22Fast = loader.load(Resources.getAsStream("/markers/v22_fast.svg"));
+        SVGDocument t38 = loader.load(Resources.getAsStream("/markers/t38.svg"));
         uav = loader.load(Resources.getAsStream("/markers/uav.svg"));
         SVGDocument typhoon = loader.load(Resources.getAsStream("/markers/typhoon.svg"));
         SVGDocument c17 = loader.load(Resources.getAsStream("/markers/c17.svg"));
         SVGDocument c5 = loader.load(Resources.getAsStream("/markers/c5.svg"));
         SVGDocument a380 = loader.load(Resources.getAsStream("/markers/a380.svg"));
         helicopter = loader.load(Resources.getAsStream("/markers/helicopter.svg"));
+        SVGDocument a10 = loader.load(Resources.getAsStream("/markers/a10.svg"));
         SVGDocument apache = loader.load(Resources.getAsStream("/markers/apache.svg"));
         SVGDocument blackhawk = loader.load(Resources.getAsStream("/markers/blackhawk.svg"));
         SVGDocument b52 = loader.load(Resources.getAsStream("/markers/b52.svg"));
@@ -218,6 +221,8 @@ public final class Markers {
         types.put("ME62", hiPerf);
         types.put("T2", hiPerf);
         types.put("T37", hiPerf);
+        types.put("T38", t38);
+        types.put("A10", a10);
         types.put("A3", hiPerf);
         types.put("A6", hiPerf);
         types.put("AT3", hiPerf);
@@ -272,7 +277,8 @@ public final class Markers {
         types.put("Q25", uav);
         types.put("HRON", uav);
 
-
+        types.put("V22F", v22Fast);
+        types.put("V22", v22Fast);
         types.put("H64", apache);
 
         // 4 bladed heavy helicopters
