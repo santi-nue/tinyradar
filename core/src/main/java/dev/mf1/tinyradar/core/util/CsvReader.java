@@ -1,4 +1,4 @@
-package dev.mf1.tinyradar.core;
+package dev.mf1.tinyradar.core.util;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Slf4j
 public final class CsvReader {
@@ -16,19 +17,18 @@ public final class CsvReader {
     private CsvReader() {
     }
 
-    public static List<Airport> read(String filename) {
+    public static <T> List<T> read(String filename, Class<T> clazz, Predicate<T> filter) {
         CsvMapper mapper = new CsvMapper();
-        List<Airport> list = new ArrayList<>();
+        List<T> list = new ArrayList<>();
 
-        try (MappingIterator<Airport> it = mapper.readerFor(Airport.class)
+        try (MappingIterator<T> it = mapper.readerFor(clazz)
                 .with(CsvSchema.emptySchema().withHeader())
                 .readValues(CsvReader.class.getResourceAsStream(filename))) {
 
             while (it.hasNext()) {
-                var airport = it.next();
-
-                if (airport.getType() == Airport.Type.LARGE || airport.getType() == Airport.Type.MEDIUM) {
-                    list.add(airport);
+                var item = it.next();
+                if (filter == null || filter.test(item)) {
+                    list.add(item);
                 }
             }
         } catch (IOException e) {
@@ -36,7 +36,6 @@ public final class CsvReader {
         }
 
         return list;
-
     }
 
 }

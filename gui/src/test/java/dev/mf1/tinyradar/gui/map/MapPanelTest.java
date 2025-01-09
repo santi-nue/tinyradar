@@ -23,7 +23,7 @@ class MapPanelTest {
 
         TinyRadar.pos = new WGS84(51.47002f, -0.45429f);
         FlatMacDarkLaf.setup();
-        TinyRadar.of().loadAirports();
+        TinyRadar.of().setup();
         TinyRadar.of().updateAirportsInRange();
         Markers.load();
 

@@ -1,7 +1,6 @@
 package dev.mf1.tinyradar.core.oa;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import dev.mf1.tinyradar.core.TinyRadarException;
 import lombok.Data;
 
 @Data

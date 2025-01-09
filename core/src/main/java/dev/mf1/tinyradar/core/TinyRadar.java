@@ -1,8 +1,11 @@
 package dev.mf1.tinyradar.core;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.eventbus.EventBus;
 import dev.mf1.tinyradar.core.oa.Airport;
 import dev.mf1.tinyradar.core.oa.AirportLookup;
+import dev.mf1.tinyradar.core.util.AfbDeserializer;
+import dev.mf1.tinyradar.core.util.CsvReader;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +35,9 @@ public final class TinyRadar {
     private final List<Airport> airportInRangeList = new CopyOnWriteArrayList<>();
 
     @Getter
+    private final List<Afb> afbList = new ArrayList<>();
+
+    @Getter
     private final Path home = Paths.get(System.getProperty("user.home"), ".tinyradar");
 
     @Getter
@@ -58,6 +64,11 @@ public final class TinyRadar {
         return instance;
     }
 
+    public void setup() {
+        loadAirports();
+        loadBases();
+    }
+
     public void launch() {
         var service = new Service();
         scheduler.scheduleAtFixedRate(service::request, 1, 2, TimeUnit.SECONDS);
@@ -70,7 +81,8 @@ public final class TinyRadar {
     public void loadAirports() {
         CompletableFuture
                 .runAsync(() -> {
-                    airportList = CsvReader.read("/airports.csv");
+                    airportList = CsvReader.read("/airports.csv", Airport.class,
+                            airport -> airport.getType() == Airport.Type.LARGE || airport.getType() == Airport.Type.MEDIUM);
                     log.info("Loaded {} airports", airportList.size());
                 })
                 .thenRun(this::updateAirportsInRange);
@@ -81,6 +93,13 @@ public final class TinyRadar {
             airportInRangeList.clear();
             airportInRangeList.addAll(AirportLookup.filterInRange(airportList));
         });
+    }
+
+    public void loadBases() {
+        CompletableFuture
+                .runAsync(() -> {
+                    afbList.addAll(CsvReader.read("/afb.csv", Afb.class, null));
+                });
     }
 
     private void initHomeFolder() {
@@ -99,6 +118,10 @@ public final class TinyRadar {
                 throw new TinyRadarException(e);
             }
         }
+    }
+
+    @JsonDeserialize(using = AfbDeserializer.class)
+    public record Afb(String name, String area, String org, WGS84 location) {
     }
 
 }

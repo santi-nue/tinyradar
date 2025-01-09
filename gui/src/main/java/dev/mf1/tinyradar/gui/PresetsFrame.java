@@ -5,25 +5,34 @@ import dev.mf1.tinyradar.core.WGS84;
 import dev.mf1.tinyradar.core.event.LocationChangeEvent;
 import lombok.extern.slf4j.Slf4j;
 import net.miginfocom.swing.MigLayout;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.table.AbstractTableModel;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
 public class PresetsFrame extends JFrame {
 
     private final Map<String, CityPreset> presets = new HashMap<>();
+    private final List<TinyRadar.Afb> afbs = TinyRadar.of().getAfbList();
 
     PresetsFrame() {
         init();
 
-        JPanel panel = new JPanel(new MigLayout("wrap 5", "[grow, fill]5[grow, fill]5[grow, fill]5[grow, fill]5[grow, fill]", "[]10[]"));
+        var pane = new JTabbedPane();
+
+        JPanel cities = new JPanel(new MigLayout("wrap 5", "[grow, fill]5[grow, fill]5[grow, fill]5[grow, fill]5[grow, fill]", "[]10[]"));
         presets.forEach((k, v) -> {
             var resource = Resources.get("/flags/" + v.code + ".png");
 
@@ -37,18 +46,46 @@ public class PresetsFrame extends JFrame {
                 Gui.rootFrame.repaint();
             });
 
-            panel.add(button);
+            cities.add(button);
         });
-        JScrollPane scrollPane = new JScrollPane(panel);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 
-        add(scrollPane);
+        JScrollPane afbScroll = createAfbScroll();
+
+        pane.addTab("Cities", cities);
+        pane.addTab("AFB", afbScroll);
+
+        add(pane);
         pack();
         setResizable(false);
         setTitle("Map Preset");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(Gui.rootFrame);
         setVisible(true);
+    }
+
+    private @NotNull JScrollPane createAfbScroll() {
+        var afbTable = new JTable(new AfbTableModel(afbs));
+
+        var selectionModel = afbTable.getSelectionModel();
+        selectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        selectionModel.addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = afbTable.getSelectedRow();
+
+                if (selectedRow != -1) {
+                    var afb = (TinyRadar.Afb) afbs.get(selectedRow);
+
+                    TinyRadar.pos = afb.location();
+                    TinyRadar.BUS.post(new LocationChangeEvent(afb.location()));
+                    TinyRadar.of().updateAirportsInRange();
+                    Gui.rootFrame.repaint();
+                }
+            }
+        });
+
+        JScrollPane afbScroll = new JScrollPane(afbTable);
+        afbScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        return afbScroll;
     }
 
     private void init() {
@@ -127,6 +164,43 @@ public class PresetsFrame extends JFrame {
     }
 
     private record CityPreset(WGS84 wgs84, String code) {
+    }
+
+    private static class AfbTableModel extends AbstractTableModel {
+
+        private final String[] columnNames = {"Name", "Area", "Org"};
+        private final List<TinyRadar.Afb> locations;
+
+        public AfbTableModel(List<TinyRadar.Afb> locations) {
+            this.locations = locations;
+        }
+
+        @Override
+        public int getRowCount() {
+            return locations.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return columnNames.length;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            var item = locations.get(rowIndex);
+
+            return switch (columnIndex) {
+                case 0 -> item.name();
+                case 1 -> item.area();
+                case 2 -> item.org();
+                default -> null;
+            };
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return columnNames[column];
+        }
     }
 
 }

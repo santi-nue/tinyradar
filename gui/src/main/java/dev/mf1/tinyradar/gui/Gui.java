@@ -46,7 +46,7 @@ public class Gui implements ShutdownListener {
         TinyRadar.pos = new WGS84(lat, lon);
         TinyRadar.zoom = zoom;
         TinyRadar.range = range;
-        TinyRadar.of().loadAirports();
+        TinyRadar.of().setup();
         TinyRadar.of().launch();
 
         SwingUtilities.invokeLater(() -> {
