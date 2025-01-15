@@ -13,16 +13,12 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final class LayerAirborne extends TransparentPanel {
 
     private final List<Aircraft> flights = new CopyOnWriteArrayList<>();
-    private final Map<String, AircraftMarkerPanel> markers = new HashMap<>();
     private Aircraft selectedAircraft;
 
     LayerAirborne() {
@@ -33,11 +29,8 @@ final class LayerAirborne extends TransparentPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        markers.clear();
-
         final Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        Gui.applyQualityRenderingHints(g2d);
 
         if (flights.isEmpty()) {
             return;
@@ -71,8 +64,8 @@ final class LayerAirborne extends TransparentPanel {
         var proj = MapUtils.getScreenPosition(p, TinyRadar.zoom, TinyRadar.pos, w, h);
 
         var doc = Markers.resolve(contact);
+
         AircraftMarkerPanel panel = new AircraftMarkerPanel(doc, contact);
-        markers.put(contact.getHex(), panel);
 
         var x = proj[0] - (int) doc.size().getWidth() / 2;
         var y = proj[1] - (int) doc.size().getHeight() / 2;
@@ -81,11 +74,13 @@ final class LayerAirborne extends TransparentPanel {
         panel.setDegrees(contact.getAnyHeading());
         add(panel);
 
-        g2d.setColor(Color.decode("#F7F7F7"));
         if (contact.getFlight() != null) {
-
             if (selectedAircraft != null && selectedAircraft.equals(contact)) {
                 g2d.setColor(Color.GREEN);
+            } else if (TinyRadar.zoom < 6) {
+                return;
+            } else {
+                g2d.setColor(Color.decode("#F7F7F7"));
             }
 
             var font = g2d.getFont();

@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import java.awt.Font;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.List;
 import java.util.prefs.Preferences;
 
 @Slf4j
-public class Gui implements ShutdownListener {
+public final class Gui implements ShutdownListener {
 
     public static SimpleFrame rootFrame;
     private static final List<ShutdownListener> shutdownListeners = new ArrayList<>();
@@ -93,4 +95,16 @@ public class Gui implements ShutdownListener {
         preferences.putInt("range", TinyRadar.range);
         preferences.putInt("zoom", TinyRadar.zoom);
     }
+
+    public static void applyQualityRenderingHints(Graphics2D g2d) {
+        g2d.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_COLOR_RENDERING, RenderingHints.VALUE_COLOR_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_DITHERING, RenderingHints.VALUE_DITHER_ENABLE);
+        g2d.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+    }
+
 }

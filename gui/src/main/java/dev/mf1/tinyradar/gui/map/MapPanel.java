@@ -6,6 +6,7 @@ import dev.mf1.tinyradar.core.WGS84;
 import dev.mf1.tinyradar.core.event.LocationChangeEvent;
 import dev.mf1.tinyradar.core.event.ZoomChangeEvent;
 import dev.mf1.tinyradar.core.util.HttpFileDownloader;
+import dev.mf1.tinyradar.gui.Gui;
 import dev.mf1.tinyradar.gui.TransparentPanel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,6 +63,7 @@ public class MapPanel extends TransparentPanel {
         super.paintComponent(g);
 
         var g2d = (Graphics2D) g;
+        Gui.applyQualityRenderingHints(g2d);
 
         int panelWidth = getWidth();
         int panelHeight = getHeight();

@@ -5,26 +5,20 @@ import com.github.weisj.jsvg.parser.SVGLoader;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 
 final class AirportMarkerPanel extends TransparentPanel {
 
-    private final SVGDocument document;
-
-    AirportMarkerPanel() {
-        var loader = new SVGLoader();
-        document = loader.load(Resources.getAsStream("/airport_icon.svg"));
-    }
+    private static final SVGDocument doc = new SVGLoader().load(Resources.getAsStream("/airport_icon.svg"));
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+        Gui.applyQualityRenderingHints(g2d);
 
-        document.render(this, g2d);
+        doc.render(this, g2d);
+        g2d.dispose();
     }
 
 }

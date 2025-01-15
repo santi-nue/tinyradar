@@ -4,13 +4,9 @@ import dev.mf1.tinyradar.core.TinyRadar;
 import dev.mf1.tinyradar.core.WGS84;
 import dev.mf1.tinyradar.gui.map.MapUtils;
 
-import javax.swing.JLabel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class LayerSurface extends TransparentPanel {
 
@@ -24,8 +20,7 @@ public class LayerSurface extends TransparentPanel {
             return;
 
         final Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
+        Gui.applyQualityRenderingHints(g2d);
 
         g2d.setColor(Color.decode("#A020F0"));
 
@@ -40,7 +35,6 @@ public class LayerSurface extends TransparentPanel {
             airportSvg.setToolTipText("%s %n %s".formatted(a.getName(), a.getIdent()));
             add(airportSvg);
         });
-
     }
 
 }
