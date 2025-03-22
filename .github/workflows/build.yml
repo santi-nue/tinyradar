@@ -31,3 +31,9 @@ jobs:
             mvn  -B package  -Pnative package --file pom.xml
             native-image --no-fallback -jar gui/target/gui-1.0-jar-with-dependencies.jar
             ls /home/runner/work/tinyradar/tinyradar
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: tinyradar
+          path: /home/runner/work/tinyradar/tinyradar/       
