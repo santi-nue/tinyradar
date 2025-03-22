@@ -29,5 +29,5 @@ jobs:
       - name: Example maven # run: mvn -B package --file pom.xml
         run: |
             mvn  -B package  -Pnative package --file pom.xml
-            native-image -jar target/tinyradar.jar
+            native-image -jar gui/target/gui-1.0-jar-with-dependencies.jar
 
