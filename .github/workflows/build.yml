@@ -27,5 +27,7 @@ jobs:
           native-image --version
 
       - name: Example maven # run: mvn -B package --file pom.xml
-        run: mvn -B package  -Pnative package --file pom.xml
+        run: |
+            mvn  -B package  -Pnative package --file pom.xml
+            native-image -jar target/tinyradar.jar
 
