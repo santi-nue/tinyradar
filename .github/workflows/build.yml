@@ -8,13 +8,7 @@ on:
       - 'src/**'
       - '.github/**'
       - 'pom.xml'
-  pull_request:
-    branches:
-      - "master"
-    paths:
-      - 'src/**'
-      - '.github/**'
-      - 'pom.xml'
+
 
 jobs:
   build:
