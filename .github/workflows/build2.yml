@@ -1,1 +1,38 @@
 
+name: build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "master"
+    paths:
+      - 'src/**'
+      - '.github/**'
+      - 'pom.xml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '23'      # See 'Options' for more details
+          distribution: 'corretto' # See 'Supported distributions' for available options
+      - name: Example step
+        run: |
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+        
+
+      - name: Example maven # run: mvn -B package --file pom.xml
+        run: |
+            mkdir mavendeps
+            mvn  dependency:copy-dependencies -DoutputDirectory=mavendeps   --file pom.xml
+            ls /home/runner/work/tinyradar/tinyradar
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: tinyradar
+          path: /home/runner/work/tinyradar/tinyradar/       
