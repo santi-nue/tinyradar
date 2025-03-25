@@ -30,6 +30,10 @@ jobs:
             mkdir mavendeps
             mvn  dependency:copy-dependencies -DoutputDirectory=mavendeps   --file pom.xml
             ls /home/runner/work/tinyradar/tinyradar
+            cd /home/runner
+            mv .m2 m2
+
+            
 
       - name: Upload binary
         uses: actions/upload-artifact@v4
@@ -41,5 +45,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tinyradarrepo
-          path: /home/runner/.m2/  
+          path: /home/runner/m2/  
 
